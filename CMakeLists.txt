@@ -303,15 +303,7 @@ CMAKE_EXPORT_BUILD_SETTINGS(${ZMQ_BINARY_DIR}/ZMQBuildSettings.cmake)
 # Save library dependencies.
 EXPORT_LIBRARY_DEPENDENCIES(${ZMQ_BINARY_DIR}/ZMQLibraryDepends.cmake)
 
-INSTALL(FILES
-  ${ZMQ_BINARY_DIR}/ZMQBuildSettings.cmake
-  ${ZMQ_BINARY_DIR}/ZMQLibraryDepends.cmake
-  ${ZMQ_BINARY_DIR}/UseZMQ.cmake
-  DESTINATION ${ZMQ_INSTALL_PACKAGE_DIR}
-  COMPONENT Development
-  )
 
-  
 #-----------------------------------------------------------------------------
 # Installation vars.
 # ZMQ_INSTALL_BIN_DIR          - binary dir (executables)
@@ -348,4 +340,11 @@ IF(NOT ZMQ_INSTALL_NO_DOCUMENTATION)
   SET(ZMQ_INSTALL_NO_DOCUMENTATION 0)
 ENDIF(NOT ZMQ_INSTALL_NO_DOCUMENTATION)
 
-SET(ZMQ_DIR "${CMAKE_BINARY_DIR}" CACHE INTERNAL "ZMQ dir to be used by subprojects")
+INSTALL(FILES
+  ${ZMQ_BINARY_DIR}/ZMQBuildSettings.cmake
+  ${ZMQ_BINARY_DIR}/ZMQLibraryDepends.cmake
+  ${ZMQ_BINARY_DIR}/UseZMQ.cmake
+  DESTINATION ${ZMQ_INSTALL_PACKAGE_DIR}
+  COMPONENT Development
+  )
+
