@@ -18,33 +18,17 @@ SET(PACKAGE_VERSION_MAJOR 2)
 SET(PACKAGE_VERSION_MINOR 0)
 SET(PACKAGE_VERSION_PATCH 6)
 
-SET(SRC_DIR ${ZMQ_SOURCE_DIR}/src)
-SET(INCLUDE_DIR ${ZMQ_SOURCE_DIR}/include)
-
 # Build with shared libraries
 OPTION(BUILD_SHARED_LIBS "Build with shared libraries" OFF) 
 
-
 # Build "./devices"
 OPTION(ZMQ_BUILD_DEVICES "Build forwarder, queue, and streamer" OFF) 
-IF(ZMQ_BUILD_DEVICES)
-  SET(DEVICES_SRC
-    ${ZMQ_SOURCE_DIR}/devices/zmq_forwarder/zmq_forwarder.cpp
-	${ZMQ_SOURCE_DIR}/devices/zmq_queue/zmq_queue.cpp
-	${ZMQ_SOURCE_DIR}/devices/zmq_streamer/zmq_streamer.cpp
-  )
-ENDIF(ZMQ_BUILD_DEVICES)
 
 # Build "./perf"
 OPTION(ZMQ_BUILD_PERFORMANCE_TESTS "Build performance test programs" OFF) 
-IF(ZMQ_BUILD_PERFORMANCE_TESTS)
-  SET(PERFORMANCE_SRC
-    ${ZMQ_SOURCE_DIR}/perf/local_lat.cpp
-	${ZMQ_SOURCE_DIR}/perf/local_thr.cpp
-	${ZMQ_SOURCE_DIR}/perf/remote_lat.cpp
-	${ZMQ_SOURCE_DIR}/perf/remote_thr.cpp
-  )
-ENDIF(ZMQ_BUILD_PERFORMANCE_TESTS)
+
+SET(SRC_DIR ${ZMQ_SOURCE_DIR}/src)
+SET(INCLUDE_DIR ${ZMQ_SOURCE_DIR}/include)
 
 SET(ZMQ_SRC
   ${SRC_DIR}/app_thread.cpp
@@ -170,6 +154,17 @@ SET(ZMQ_SRC
   ${INCLUDE_DIR}/zmq.hpp
 )
 
+# Create the list of include directories needed for ZMQ header files.
+INCLUDE(${ZMQ_SOURCE_DIR}/ZMQIncludeDirectories.cmake)
+
+# This should be the only INCLUDE_DIRECTORIES command in the entire
+# tree, except for the Utilities and Wrapping directories.  We need to
+# do this in one place to make sure the order is correct.
+INCLUDE_DIRECTORIES(
+  ${IGSTK_INCLUDE_DIRS_BUILD_TREE}
+  ${IGSTK_INCLUDE_DIRS_BUILD_TREE_CXX}
+  ${IGSTK_INCLUDE_DIRS_SYSTEM}
+)
 
 #####################################################
 INCLUDE (CheckIncludeFiles)
@@ -258,12 +253,6 @@ CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/platform.hpp.in
                ${PROJECT_BINARY_DIR}/platform.hpp
                @ONLY IMMEDIATE)
 
-INCLUDE_DIRECTORIES(
-  ${ZMQ_SOURCE_DIR}/src
-  ${ZMQ_SOURCE_DIR}/include
-  ${ZMQ_BINARY_DIR}
-  )
-
 ADD_LIBRARY(ZMQ ${ZMQ_SRC} )
 TARGET_LINK_LIBRARIES(ZMQ ${LIB_DEP})
 
@@ -294,3 +283,69 @@ IF(ZMQ_BUILD_PERFORMANCE_TESTS)
   ADD_EXECUTABLE(remote_thr ${ZMQ_SOURCE_DIR}/perf/remote_thr.cpp)
   TARGET_LINK_LIBRARIES(remote_thr ZMQ)
 ENDIF(ZMQ_BUILD_PERFORMANCE_TESTS)
+
+
+#####################################################
+# Help other projects use ZMQ.
+#####################################################
+
+# Copy the UseZMQ.cmake file to the binary tree for backward compatability.
+CONFIGURE_FILE(${ZMQ_SOURCE_DIR}/UseZMQ.cmake.in
+${ZMQ_BINARY_DIR}/UseZMQ.cmake COPYONLY IMMEDIATE)
+
+# Create the ZMQConfig.cmake file containing the ZMQ configuration.
+INCLUDE (${ZMQ_SOURCE_DIR}/GenerateZMQConfig.cmake)
+
+# Save the compiler settings so another project can import them.
+INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
+CMAKE_EXPORT_BUILD_SETTINGS(${ZMQ_BINARY_DIR}/ZMQBuildSettings.cmake)
+
+# Save library dependencies.
+EXPORT_LIBRARY_DEPENDENCIES(${ZMQ_BINARY_DIR}/ZMQLibraryDepends.cmake)
+
+INSTALL(FILES
+  ${ZMQ_BINARY_DIR}/ZMQBuildSettings.cmake
+  ${ZMQ_BINARY_DIR}/ZMQLibraryDepends.cmake
+  ${ZMQ_BINARY_DIR}/UseZMQ.cmake
+  DESTINATION ${ZMQ_INSTALL_PACKAGE_DIR}
+  COMPONENT Development
+  )
+
+  
+#-----------------------------------------------------------------------------
+# Installation vars.
+# ZMQ_INSTALL_BIN_DIR          - binary dir (executables)
+# ZMQ_INSTALL_LIB_DIR          - library dir (libs)
+# ZMQ_INSTALL_DATA_DIR         - share dir (say, examples, data, etc)
+# ZMQ_INSTALL_INCLUDE_DIR      - include dir (headers)
+# ZMQ_INSTALL_PACKAGE_DIR      - package/export configuration files
+# ZMQ_INSTALL_NO_DEVELOPMENT   - do not install development files
+# ZMQ_INSTALL_NO_RUNTIME       - do not install runtime files
+# ZMQ_INSTALL_NO_DOCUMENTATION - do not install documentation files
+
+IF(NOT ZMQ_INSTALL_BIN_DIR)
+  SET(ZMQ_INSTALL_BIN_DIR "bin")
+ENDIF(NOT ZMQ_INSTALL_BIN_DIR)
+
+IF(NOT ZMQ_INSTALL_LIB_DIR)
+  SET(ZMQ_INSTALL_LIB_DIR "lib/zmq")
+ENDIF(NOT ZMQ_INSTALL_LIB_DIR)
+
+IF(NOT ZMQ_INSTALL_DATA_DIR)
+  SET(ZMQ_INSTALL_DATA_DIR "share/zmq")
+ENDIF(NOT ZMQ_INSTALL_DATA_DIR)
+
+IF(NOT ZMQ_INSTALL_INCLUDE_DIR)
+  SET(ZMQ_INSTALL_INCLUDE_DIR "include/zmq")
+ENDIF(NOT ZMQ_INSTALL_INCLUDE_DIR)
+
+IF(NOT ZMQ_INSTALL_PACKAGE_DIR)
+  SET(ZMQ_INSTALL_PACKAGE_DIR ${ZMQ_INSTALL_LIB_DIR}
+    CACHE INTERNAL "")
+ENDIF(NOT ZMQ_INSTALL_PACKAGE_DIR)
+
+IF(NOT ZMQ_INSTALL_NO_DOCUMENTATION)
+  SET(ZMQ_INSTALL_NO_DOCUMENTATION 0)
+ENDIF(NOT ZMQ_INSTALL_NO_DOCUMENTATION)
+
+SET(ZMQ_DIR "${CMAKE_BINARY_DIR}" CACHE INTERNAL "ZMQ dir to be used by subprojects")
