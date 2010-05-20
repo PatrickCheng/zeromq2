@@ -32,7 +32,7 @@ extern "C" {
 
 /*  Win32 needs special handling for DLL exports                              */
 #if defined _WIN32
-#   if defined DLL_EXPORT
+#   if defined ZMQ_EXPORTS
 #       define ZMQ_EXPORT __declspec(dllexport)
 #   else
 #       define ZMQ_EXPORT __declspec(dllimport)
