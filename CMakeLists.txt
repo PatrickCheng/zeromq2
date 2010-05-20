@@ -201,6 +201,7 @@ IF(UNIX)
     SET(ZMQ_HAVE_OSX 1)
   ELSE()
     SET(ZMQ_HAVE_LINUX 1)
+	SET(LIB_DEP pthread uuid)
   ENDIF()
 ENDIF(UNIX)
 
