@@ -160,10 +160,11 @@ INCLUDE(${ZMQ_SOURCE_DIR}/ZMQIncludeDirectories.cmake)
 # This should be the only INCLUDE_DIRECTORIES command in the entire
 # tree, except for the Utilities and Wrapping directories.  We need to
 # do this in one place to make sure the order is correct.
+
 INCLUDE_DIRECTORIES(
-  ${IGSTK_INCLUDE_DIRS_BUILD_TREE}
-  ${IGSTK_INCLUDE_DIRS_BUILD_TREE_CXX}
-  ${IGSTK_INCLUDE_DIRS_SYSTEM}
+  ${ZMQ_INCLUDE_DIRS_BUILD_TREE}
+  ${ZMQ_INCLUDE_DIRS_BUILD_TREE_CXX}
+  ${ZMQ_INCLUDE_DIRS_SYSTEM}
 )
 
 #####################################################
