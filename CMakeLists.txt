@@ -298,8 +298,8 @@ ${ZMQ_BINARY_DIR}/UseZMQ.cmake COPYONLY IMMEDIATE)
 INCLUDE (${ZMQ_SOURCE_DIR}/GenerateZMQConfig.cmake)
 
 # Save the compiler settings so another project can import them.
-INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
-CMAKE_EXPORT_BUILD_SETTINGS(${ZMQ_BINARY_DIR}/ZMQBuildSettings.cmake)
+#INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
+#CMAKE_EXPORT_BUILD_SETTINGS(${ZMQ_BINARY_DIR}/ZMQBuildSettings.cmake)
 
 # Save library dependencies.
 EXPORT_LIBRARY_DEPENDENCIES(${ZMQ_BINARY_DIR}/ZMQLibraryDepends.cmake)
