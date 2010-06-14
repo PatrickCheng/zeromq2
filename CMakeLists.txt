@@ -19,13 +19,13 @@ SET(PACKAGE_VERSION_MINOR 0)
 SET(PACKAGE_VERSION_PATCH 6)
 
 # Build with shared libraries
-OPTION(BUILD_SHARED_LIBS "Build with shared libraries" OFF) 
+OPTION(BUILD_SHARED_LIBS "Build with shared libraries" OFF)
 
 # Build "./devices"
-OPTION(ZMQ_BUILD_DEVICES "Build forwarder, queue, and streamer" OFF) 
+OPTION(ZMQ_BUILD_DEVICES "Build forwarder, queue, and streamer" OFF)
 
 # Build "./perf"
-OPTION(ZMQ_BUILD_PERFORMANCE_TESTS "Build performance test programs" OFF) 
+OPTION(ZMQ_BUILD_PERFORMANCE_TESTS "Build performance test programs" OFF)
 
 SET(SRC_DIR ${ZMQ_SOURCE_DIR}/src)
 SET(INCLUDE_DIR ${ZMQ_SOURCE_DIR}/include)
