@@ -29,20 +29,20 @@
 // OS related
 /////////////////////////////////////////////
 /* Translate CMake VAR to ZMQ defs */
-#cmakedefine ZMQ_HAVE_WINDOWS 
-#cmakedefine ZMQ_HAVE_LINUX   
+#cmakedefine ZMQ_HAVE_WINDOWS
+#cmakedefine ZMQ_HAVE_LINUX
 #cmakedefine ZMQ_HAVE_OSX
 
 //TODO
 #cmakedefine ZMQ_HAVE_MINGW32
 #cmakedefine ZMQ_HAVE_AIX
 #cmakedefine ZMQ_HAVE_FREEBSD
-#cmakedefine ZMQ_HAVE_HPUX         
-#cmakedefine ZMQ_HAVE_OPENBSD      
-#cmakedefine ZMQ_HAVE_OPENPGM      
-#cmakedefine ZMQ_HAVE_OPENPGM2     
-#cmakedefine ZMQ_HAVE_QNXNTO       
-#cmakedefine ZMQ_HAVE_SOLARIS      
+#cmakedefine ZMQ_HAVE_HPUX
+#cmakedefine ZMQ_HAVE_OPENBSD
+#cmakedefine ZMQ_HAVE_OPENPGM
+#cmakedefine ZMQ_HAVE_OPENPGM2
+#cmakedefine ZMQ_HAVE_QNXNTO
+#cmakedefine ZMQ_HAVE_SOLARIS
 
 #cmakedefine _WINSOCKAPI_
 #cmakedefine NOMINMAX
@@ -231,4 +231,4 @@
    code using `volatile' can become incorrect without. Disable with care. */
 #cmakedefine volatile
 
-#endif 
+#endif
