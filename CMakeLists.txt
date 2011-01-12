@@ -31,6 +31,19 @@ OPTION(ZMQ_BUILD_PERFORMANCE_TESTS "Build performance test programs" OFF)
 SET(SRC_DIR ${ZMQ_SOURCE_DIR}/src)
 SET(INCLUDE_DIR ${ZMQ_SOURCE_DIR}/include)
 
+IF(NOT LIBRARY_OUTPUT_PATH)
+  SET(LIBRARY_OUTPUT_PATH ${ZMQ_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for building all libraries.")
+ENDIF(NOT LIBRARY_OUTPUT_PATH)
+
+IF(NOT EXECUTABLE_OUTPUT_PATH)
+  SET(EXECUTABLE_OUTPUT_PATH ${ZMQ_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for building all executables.")
+ENDIF(NOT EXECUTABLE_OUTPUT_PATH)
+
+MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
+
+SET(ZMQ_LIBRARY_PATH "${LIBRARY_OUTPUT_PATH}")
+SET(ZMQ_EXECUTABLE_PATH "${EXECUTABLE_OUTPUT_PATH}")
+
 SET(ZMQ_SRC
   ${SRC_DIR}/app_thread.cpp
   ${SRC_DIR}/app_thread.hpp
@@ -162,11 +175,13 @@ INCLUDE(${ZMQ_SOURCE_DIR}/ZMQIncludeDirectories.cmake)
 # tree, except for the Utilities and Wrapping directories.  We need to
 # do this in one place to make sure the order is correct.
 
-INCLUDE_DIRECTORIES(
+SET(ZMQ_INCLUDE_DIRS
   ${ZMQ_INCLUDE_DIRS_BUILD_TREE}
   ${ZMQ_INCLUDE_DIRS_BUILD_TREE_CXX}
   ${ZMQ_INCLUDE_DIRS_SYSTEM}
 )
+
+INCLUDE_DIRECTORIES( ${ZMQ_INCLUDE_DIRS})
 
 #####################################################
 INCLUDE (CheckIncludeFiles)
@@ -297,7 +312,7 @@ ENDIF(ZMQ_BUILD_PERFORMANCE_TESTS)
 
 # Copy the UseZMQ.cmake file to the binary tree for backward compatability.
 CONFIGURE_FILE(${ZMQ_SOURCE_DIR}/UseZMQ.cmake.in
-${ZMQ_BINARY_DIR}/UseZMQ.cmake COPYONLY IMMEDIATE)
+${ZMQ_BINARY_DIR}/UseZMQ.cmake @ONLY IMMEDIATE)
 
 # Create the ZMQConfig.cmake file containing the ZMQ configuration.
 INCLUDE (${ZMQ_SOURCE_DIR}/GenerateZMQConfig.cmake)
